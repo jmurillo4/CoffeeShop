@@ -1,0 +1,461 @@
+/* ==========================================================================
+   1. CORE THEMES & VARIABLES
+   ========================================================================== */
+:root {
+    /* Global Utility Variables (Do not change across themes) */
+    --danger: #ef5350;
+    --warning: #ffb74d;
+    --border-radius: 8px;
+}
+
+/* DEFAULT BASE THEME (Classic Dark Wood & Slate) */
+body {
+    --wood-dark: #2d1a14;
+    --wood-main: #4e342e;
+    --wood-light: #8d6e63;
+    --machine-casing: #b0bec5;
+    --screen-bg: #1c2833;
+    --screen-text: #39ff14; /* Retro green terminal text */
+    --panel-bg: #f7f5f2;    /* Control panel background */
+    
+    font-family: 'Courier New', Courier, monospace; /* Pixel/Gaming flavor text */
+    background-color: #121212;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* THE NEW PINK THEME OVERRIDES */
+body.pink-theme {
+    --wood-dark: #880e4f;      /* Deep Berry */
+    --wood-main: #c2185b;      /* Hot Magenta Pink */
+    --wood-light: #f48fb1;     /* Soft Pastel Pink */
+    --machine-casing: #f8bbd0; /* Soft Rose Casing */
+    --screen-bg: #4a0033;      /* Dark Plum Screen */
+    --screen-text: #ffb74d;    /* Warm Gold Text for the screen */
+    --panel-bg: #fff0f5;       /* Lavender Blush panel background */
+    
+    background-color: #2a1b24; /* Changes the outer screen frame margin tone */
+}
+
+
+/* ==========================================================================
+   2. MASTER APPLICATION VIEWPORT CONTAINER
+   ========================================================================== */
+.game-viewport {
+    display: flex;
+    width: 98vw;
+    max-width: 1280px;
+    height: 90vh;
+    border: 6px solid #000;
+    background-color: #263238;
+}
+
+
+/* ==========================================================================
+   3. LEFT SIDE: FIRST-PERSON CUSTOMER WINDOW COUNTER
+   ========================================================================== */
+.counter-pane {
+    flex: 1.2; /* Slightly wider space for customer immersion */
+    background: radial-gradient(circle, #37474f 40%, #212121 100%); /* Moody indoor backdrop */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    border-right: 6px solid #000;
+}
+
+.awning {
+    background: #b71c1c;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border-bottom: 4px solid #000;
+    letter-spacing: 2px;
+    z-index: 10;
+}
+
+.customer-area {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+}
+
+.dialogue-bubble {
+    background: #fffdf0;
+    color: #000;
+    padding: 15px 20px;
+    border: 3px solid #000;
+    border-radius: 12px;
+    max-width: 70%;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    z-index: 5; /* Forces chat bubbles to float securely on top of characters */
+}
+
+/* The viewport stage holding our overlapping image assets */
+.pov-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Base room layer stretched to completely fill the frame layout */
+.layer-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Lowest structural depth layer */
+}
+
+/* The transparent character assets layer beautifully over the layout center */
+.layer-customer {
+    position: absolute;
+    bottom: 0; /* Anchor characters right to the bottom wood counter surface edge */
+    left: 50%;
+    transform: translateX(-50%); /* Clean absolute alignment targeting dead center */
+    height: 85%; /* Scaled cleanly so character assets look natural */
+    object-fit: contain;
+    z-index: 2; /* Sandwiched right above the shop background scene */
+    transition: opacity 0.3s ease; /* Fades characters in/out smoothly during rounds */
+}
+
+.wooden-bar {
+    height: 80px;
+    background: linear-gradient(to bottom, var(--wood-light), var(--wood-main));
+    border-top: 6px solid var(--wood-dark);
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    z-index: 4;
+}
+
+.phone-drop-zone {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+
+/* ==========================================================================
+   4. RIGHT SIDE: MULTI-PANE OPERATIONS SIDEBAR
+   ========================================================================== */
+.station-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TOP RIGHT SUB-PANE: STORAGE SHELVES */
+.shelf-subpane {
+    flex: 1;
+    background-color: var(--wood-dark); /* Dynamic wood back wall panels */
+    border-bottom: 6px solid #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    transition: background-color 0.4s ease;
+}
+
+.shelf-wood {
+    background: var(--wood-main);
+    border: 3px solid #000;
+    border-bottom: 8px solid var(--wood-dark);
+    padding: 12px;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 4px;
+    transition: background-color 0.4s ease, border-color 0.4s ease;
+}
+
+.shelf-item {
+    background: #fff;
+    color: #000;
+    padding: 6px 12px;
+    border: 2px solid #000;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+/* Live stock alerts tied directly into your app.js triggers */
+.shelf-item.warning { background-color: var(--warning); color: #000; }
+.shelf-item.critical { background-color: var(--danger); color: white; }
+
+.restock-row {
+    display: flex;
+    gap: 8px;
+}
+
+/* BOTTOM RIGHT SUB-PANE: COFFEE BREWER INTERFACE CONSOLE */
+.console-subpane {
+    flex: 1.5;
+    background-color: #455a64; /* Industrial back casing framing color */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar-controls {
+    background-color: var(--panel-bg); /* Sweeps dynamically with layout color updates */
+    border: 4px solid #000;
+    border-radius: var(--border-radius);
+    height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    transition: background-color 0.4s ease;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #000;
+    padding-bottom: 8px;
+    margin: 0;
+}
+.main-header h2 { margin: 0; font-size: 1.2rem; color: var(--wood-dark); transition: color 0.4s; }
+
+.day-badge {
+    background-color: var(--wood-dark);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.4s;
+}
+
+.stat-card {
+    background: var(--wood-main);
+    color: white;
+    padding: 12px;
+    border: 3px solid #000;
+    border-radius: var(--border-radius);
+    text-align: center;
+    transition: background-color 0.4s;
+}
+.stat-card h3 { margin: 0; font-size: 0.85rem; opacity: 0.9; text-transform: uppercase; }
+.stat-card .balance { font-size: 1.7rem; font-weight: bold; margin-top: 4px; }
+
+.dashboard-card {
+    background: #ffffff;
+    border: 3px solid #000;
+    border-radius: var(--border-radius);
+    padding: 12px;
+}
+.dashboard-card h3 { margin-top: 0; margin-bottom: 8px; font-size: 1rem; color: var(--wood-dark); }
+
+.control-group label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 0.85rem; }
+.control-group input {
+    width: 100%;
+    padding: 8px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    border: 3px solid #000;
+    box-sizing: border-box;
+}
+
+/* CRT Green Terminal Display Screen */
+.display-screen {
+    background-color: var(--screen-bg);
+    border: 3px solid #000;
+    color: var(--screen-text);
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    transition: background-color 0.4s, color 0.4s;
+}
+.display-screen h4 { margin: 0 0 5px 0; color: #fff; text-decoration: underline; }
+
+
+/* ==========================================================================
+   5. BUTTONS & UTILITY STYLES
+   ========================================================================== */
+.btn {
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    border: 3px solid #000;
+    box-shadow: 2px 2px 0px #000;
+    transition: background-color 0.2s;
+}
+.btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px #000;
+}
+
+.btn-buy {
+    flex: 1;
+    background: #cfd8dc;
+    padding: 8px 4px;
+    font-size: 0.8rem;
+}
+.btn-buy:hover { background: #b0bec5; }
+
+.btn-start {
+    background: #ffecb3;
+    padding: 12px;
+    font-size: 1rem;
+    width: 100%;
+    letter-spacing: 1px;
+}
+.btn-start:hover { background: #ffe082; }
+.btn-start:disabled {
+    background: #90a4ae !important;
+    color: #cfd8dc !important;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 2px 2px 0px #000;
+}
+
+/* Theme Switching Widget Alignment Box */
+.theme-switch-container {
+    margin-top: auto; /* Clean layout rule pushing switch directly to footer base line */
+    padding-top: 5px;
+}
+.btn-theme {
+    width: 100%;
+    background: #f8bbd0;
+    color: #880e4f;
+    padding: 8px;
+    font-size: 0.85rem;
+}
+
+/* Global Hiding Helper State Utility */
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none; /* Safely hides logging/elements from active visual calculations */
+}
+/* Full-Screen Dimmed Overlay Background */
+.phone-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 100; /* Forces it to hover above everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* The Phone Body Container */
+.phone-device {
+    background: #1e1e24;
+    border: 5px solid #3a3a44;
+    border-radius: 24px;
+    width: 280px;
+    height: 500px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.phone-close {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    background: #000;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 5px;
+}
+
+.phone-screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    text-align: center;
+}
+.phone-screen h3 { font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 25px; color: #a4b0be; }
+
+/* Pin Dots Entry Display */
+.pin-dots {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+.dot {
+    width: 15px;
+    height: 15px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    transition: background 0.1s ease;
+}
+.dot.filled { background: #39ff14; border-color: #39ff14; } /* Glow green when pressed */
+
+/* Grid Button System */
+.phone-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+}
+.phone-keypad button {
+    background: #2f3542;
+    color: #fff;
+    border: 2px solid #57606f;
+    font-family: inherit;
+    font-size: 1.2rem;
+    padding: 15px 0;
+    cursor: pointer;
+    border-radius: 8px;
+}
+.phone-keypad button:active { background: #57606f; }
+.phone-keypad .btn-clear { background: #747d8c; font-size: 0.8rem; }
+.phone-keypad .btn-submit { background: #2ed573; border-color: #26af5f; }
+
+/* Content State Display Window */
+.phone-scroll-content {
+    background: #f1f2f6;
+    color: #2f3542;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.8rem;
+    text-align: left;
+    height: 380px;
+    overflow-y: auto;
+}
+.phone-note-img {
+    width: 100%;
+    margin-top: 10px;
+    border: 2px solid #000;
+    border-radius: 4px;
+}
+
+/* Modal Helper Utilities */
+.hidden-modal { display: none !important; }
+.hidden-element { display: none !important; }

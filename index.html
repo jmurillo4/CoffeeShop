@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barista POV Tycoon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="game-viewport">
+        
+        <!-- LEFT SIDE: FIRST-PERSON CUSTOMER COUNTER -->
+        <div class="counter-pane">
+            <div class="awning">☕ FRESH BREW CO. ☕</div>
+            
+            <div class="customer-area">
+                <!-- Dialogue Box sits on top -->
+                <div class="dialogue-bubble" id="speech-bubble">
+                    "Welcome! Click 'Open Window' to start the day."
+                </div>
+                
+                <!-- VISUAL LAYERS -->
+                <div class="pov-stage">
+                    <!-- Layer 1: Blank Shop Background -->
+                    <img src="images/coffee-bg.png" class="layer-bg" alt="Cafe Background">
+                    
+                    <!-- Layer 2: Transparent Customer (Swapped dynamically by JS) -->
+                    <img src="" class="layer-customer hidden" id="customer-sprite" alt="Customer">
+                </div>
+            </div>
+            
+            <div class="wooden-bar">
+                <div class="phone-drop-zone" onclick="openPhone()">📱</div>
+            </div>
+        </div>
+
+        <div class="station-pane">
+            
+            <div class="shelf-subpane">
+                <div class="shelf-wood">
+                    <span class="shelf-item" id="item-beans">🫘 Beans: <b id="beans-display">10</b></span>
+                    <span class="shelf-item" id="item-milk">🥛 Milk: <b id="milk-display">10</b></span>
+                    <span class="shelf-item" id="item-cups">🥤 Cups: <b id="cups-display">10</b></span>
+                </div>
+                <div class="restock-row">
+                    <button class="btn btn-buy" onclick="buyItem('beans', 10)">+10 Beans ($5)</button>
+                    <button class="btn btn-buy" onclick="buyItem('milk', 10)">+10 Milk ($3)</button>
+                    <button class="btn btn-buy" onclick="buyItem('cups', 10)">+10 Cups ($1)</button>
+                </div>
+            </div>
+            
+            <div class="console-subpane">
+                <div class="machine-interface">
+                    <div class="meta-row">
+                        <div class="hud-item">📅 Day <span id="day-display">1</span></div>
+                        <div class="hud-item cash-text">💰 $<span id="cash-display">100.00</span></div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="coffee-price-input">Set Price Per Cup ($):</label>
+                        <input type="number" id="coffee-price-input" value="4.00" step="0.25" min="0.50">
+                    </div>
+
+                    <button id="start-day-btn" class="btn btn-start">BREW & OPEN SHOP</button>
+
+                    <div id="results-log" class="display-screen hidden">
+                        <h4>END OF DAY REPORT</h4>
+                        <div id="results-content"></div>
+                    </div>
+                    <div class="theme-switch-container">
+                        <button id="theme-toggle-btn" class="btn btn-theme" onclick="toggleTheme()">✨ Make It Pink</button>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+
+    <div id="phone-modal" class="phone-overlay hidden-modal">
+    <div class="phone-device">
+        <button class="phone-close" onclick="closePhone()">❌</button>
+        
+        <div id="phone-pin-screen" class="phone-screen">
+            <h3>ENTER DEVICE PIN</h3>
+            <div class="pin-dots">
+                <span class="dot" id="dot-0"></span>
+                <span class="dot" id="dot-1"></span>
+                <span class="dot" id="dot-2"></span>
+                <span class="dot" id="dot-3"></span>
+            </div>
+            
+            <div class="phone-keypad">
+                <button onclick="pressPinKey('1')">1</button>
+                <button onclick="pressPinKey('2')">2</button>
+                <button onclick="pressPinKey('3')">3</button>
+                <button onclick="pressPinKey('4')">4</button>
+                <button onclick="pressPinKey('5')">5</button>
+                <button onclick="pressPinKey('6')">6</button>
+                <button onclick="pressPinKey('7')">7</button>
+                <button onclick="pressPinKey('8')">8</button>
+                <button onclick="pressPinKey('9')">9</button>
+                <button onclick="clearPin()" class="btn-clear">CLR</button>
+                <button onclick="pressPinKey('0')">0</button>
+                <button id="pin-submit-btn" class="btn-submit">✔️</button>
+            </div>
+        </div>
+
+        <div id="phone-content-screen" class="phone-screen hidden-element">
+            <h3>I LOVE YOU❤️</h3>
+            <div class="phone-scroll-content">
+                <p><strong>For my beautiful Michelle</strong></p>
+                <p></p>
+                <img src="images/customers/Nailong.jpg" class="phone-note-img" alt="Secret Blueprint">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
